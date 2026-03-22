@@ -1,0 +1,103 @@
+<div class="animate-fade-in">
+  <!-- Header -->
+  <div class="flex items-center gap-3 mb-5">
+    <a routerLink="/admin/students"
+       class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+      <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </a>
+    <div class="flex-1">
+      <h1 class="text-xl font-bold text-gray-900">{{ email() }}</h1>
+    </div>
+    <button (click)="openAddPayment()"
+            class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium
+                   hover:bg-green-700 transition cursor-pointer">
+      Record Payment
+    </button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex gap-1 mb-4 border-b border-gray-200">
+    <button (click)="tab.set('attendance')"
+            [class]="tab() === 'attendance'
+              ? 'px-4 py-2 text-sm font-medium text-green-700 border-b-2 border-green-600 -mb-px'
+              : 'px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700'"
+            class="cursor-pointer">
+      Attendance
+    </button>
+    <button (click)="tab.set('payments')"
+            [class]="tab() === 'payments'
+              ? 'px-4 py-2 text-sm font-medium text-green-700 border-b-2 border-green-600 -mb-px'
+              : 'px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700'"
+            class="cursor-pointer">
+      Payments
+    </button>
+  </div>
+
+  <!-- Attendance tab -->
+  @if (tab() === 'attendance') {
+    @if (loadingAttendance()) {
+      <div class="flex justify-center py-12">
+        <div class="w-7 h-7 border-[3px] border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+      </div>
+    } @else if (attendance().length === 0) {
+      <p class="text-center py-12 text-gray-400 text-sm">No attendance records</p>
+    } @else {
+      <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-100 bg-gray-50/50">
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Marked At</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            @for (a of attendance(); track a.markedAt) {
+              <tr class="hover:bg-gray-50/50">
+                <td class="px-4 py-3 text-gray-900">{{ a.date | date:'mediumDate':'Asia/Kolkata' }}</td>
+                <td class="px-4 py-3 text-gray-500">{{ a.markedAt | date:'medium':'Asia/Kolkata' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  <!-- Payments tab -->
+  @if (tab() === 'payments') {
+    @if (loadingPayments()) {
+      <div class="flex justify-center py-12">
+        <div class="w-7 h-7 border-[3px] border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+      </div>
+    } @else if (payments().length === 0) {
+      <p class="text-center py-12 text-gray-400 text-sm">No payment records</p>
+    } @else {
+      <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-100 bg-gray-50/50">
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Date</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Amount</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Sessions</th>
+              <th class="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase">Recorded By</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            @for (p of payments(); track p.createdAt) {
+              <tr class="hover:bg-gray-50/50">
+                <td class="px-4 py-3 text-gray-900">{{ p.date | date:'mediumDate':'Asia/Kolkata' }}</td>
+                <td class="px-4 py-3 font-medium text-gray-900">{{ p.amount | currency:'INR' }}</td>
+                <td class="px-4 py-3">
+                  <span class="px-2 py-0.5 rounded-full bg-green-50 text-green-700 text-xs font-bold">+{{ p.sessionsAdded }}</span>
+                </td>
+                <td class="px-4 py-3 text-gray-500">{{ p.recordedBy }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>

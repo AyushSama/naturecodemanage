@@ -1,12 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ModalHostComponent } from '@shared/components/modal/modal-host.component';
+import { ToastHostComponent } from '@shared/components/toast/toast-host.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, ModalHostComponent, ToastHostComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss'],
 })
-export class App {
-  protected readonly title = signal('naturecode');
-}
+export class App {}

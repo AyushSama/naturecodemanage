@@ -1,0 +1,51 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6">Payment History</h1>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="flex items-center justify-center py-20">
+      <div class="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  }
+
+  @if (!loading()) {
+    @if (payments().length === 0) {
+      <!-- Empty State -->
+      <div class="text-center py-16 text-gray-400">
+        <p class="text-lg font-medium">No payments recorded yet.</p>
+        <p class="text-sm mt-1">Your payment history will appear here.</p>
+      </div>
+    } @else {
+      <!-- Table -->
+      <div class="bg-white rounded-2xl shadow border border-gray-100 overflow-hidden">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+              <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
+              <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Sessions Added</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            @for (payment of payments(); track payment.createdAt; let i = $index) {
+              <tr class="hover:bg-gray-50 transition">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ payment.date | date:'mediumDate':'Asia/Kolkata' }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700">{{ payment.amount | currency:'INR':'symbol':'1.0-0' }}</td>
+                <td class="px-6 py-4">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                    +{{ payment.sessionsAdded }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <p class="mt-4 text-sm text-gray-500 text-right">
+        Total payments: <span class="font-semibold text-gray-700">{{ payments().length }}</span>
+      </p>
+    }
+  }
+</div>

@@ -1,0 +1,55 @@
+<div class="p-6 max-h-[70vh] flex flex-col">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h2 class="text-lg font-bold text-gray-900">Attendance Sheet</h2>
+      <p class="text-sm text-gray-500 mt-0.5">{{ data?.studentName }} &bull; {{ data?.studentEmail }}</p>
+    </div>
+    <button (click)="modalClose()"
+            class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-12">
+      <div class="w-7 h-7 border-[3px] border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+    </div>
+  } @else if (records().length === 0) {
+    <div class="text-center py-12">
+      <svg class="w-10 h-10 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+      <p class="text-gray-400 text-sm">No attendance records yet</p>
+    </div>
+  } @else {
+    <div class="overflow-y-auto flex-1 -mx-6 px-6">
+      <table class="w-full text-sm">
+        <thead class="sticky top-0 bg-white">
+          <tr class="border-b border-gray-100">
+            <th class="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider w-10">#</th>
+            <th class="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+            <th class="text-left py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Marked At</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50">
+          @for (a of records(); track a.markedAt; let i = $index) {
+            <tr class="hover:bg-gray-50/50">
+              <td class="py-2.5">
+                <span class="w-6 h-6 inline-flex items-center justify-center rounded-full bg-primary-50 text-primary-700 text-xs font-semibold">
+                  {{ i + 1 }}
+                </span>
+              </td>
+              <td class="py-2.5 text-gray-900">{{ a.date | date:'mediumDate':'Asia/Kolkata' }}</td>
+              <td class="py-2.5 text-gray-500">{{ a.markedAt | date:'short':'Asia/Kolkata' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="pt-3 mt-2 border-t border-gray-100 text-xs text-gray-400 text-right">
+      Total: {{ records().length }} sessions attended
+    </div>
+  }
+</div>

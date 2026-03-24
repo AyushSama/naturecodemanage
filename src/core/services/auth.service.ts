@@ -1,5 +1,5 @@
 import { Injectable, signal, computed, NgZone } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { User } from '@core/models/user.model';
@@ -39,7 +39,8 @@ export class AuthService {
         sessionStorage.setItem('user', JSON.stringify(user));
         this.router.navigate([user.role === 'admin' ? '/admin' : '/student']);
       },
-      error: () => {
+      error: (err : HttpErrorResponse) => {
+        console.log(err);
         this._idToken.set(null);
         this._currentUser.set(null);
       },

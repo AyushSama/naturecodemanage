@@ -22,11 +22,20 @@ export class AuthService {
   getToken(): string | null { return this._idToken(); }
 
   initGoogleSignIn(buttonElement: HTMLElement): void {
-    google.accounts.id.initialize({
-      client_id: environment.googleClientId,
-      callback: (response: any) => this.ngZone.run(() => this.handleCredentialResponse(response)),
-    });
-    google.accounts.id.renderButton(buttonElement, { theme: 'outline', size: 'large', width: 300 });
+    const render = () => {
+      google.accounts.id.initialize({
+        client_id: environment.googleClientId,
+        callback: (response: any) => this.ngZone.run(() => this.handleCredentialResponse(response)),
+      });
+      google.accounts.id.renderButton(buttonElement, { theme: 'outline', size: 'large', width: 300 });
+    };
+
+    if (typeof google !== 'undefined' && google.accounts) {
+      render();
+    } else {
+      const script = document.querySelector<HTMLScriptElement>('script[src*="accounts.google.com/gsi/client"]');
+      script?.addEventListener('load', render);
+    }
   }
 
   private handleCredentialResponse(response: any): void {

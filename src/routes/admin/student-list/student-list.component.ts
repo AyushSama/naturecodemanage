@@ -20,6 +20,7 @@ export class StudentListComponent implements OnInit {
   students = signal<StudentSummary[]>([]);
   loading = signal(true);
   searchQuery = signal('');
+  revenueVisible = signal(false);
 
   totalStudents = computed(() => this.students().length);
   totalRevenue = computed(() => this.students().reduce((s, st) => s + st.totalPaid, 0));

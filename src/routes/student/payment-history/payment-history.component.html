@@ -1,5 +1,5 @@
-<div class="max-w-3xl mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold text-gray-900 mb-6">Payment History</h1>
+<div class="max-w-3xl mx-auto px-4 py-6 sm:py-8">
+  <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Payment History</h1>
 
   <!-- Loading -->
   @if (loading()) {
@@ -16,8 +16,8 @@
         <p class="text-sm mt-1">Your payment history will appear here.</p>
       </div>
     } @else {
-      <!-- Table -->
-      <div class="bg-white rounded-2xl shadow border border-gray-100 overflow-hidden">
+      <!-- Desktop table -->
+      <div class="hidden sm:block bg-white rounded-2xl shadow border border-gray-100 overflow-hidden">
         <table class="w-full text-left">
           <thead class="bg-gray-50">
             <tr>
@@ -40,6 +40,21 @@
             }
           </tbody>
         </table>
+      </div>
+
+      <!-- Mobile card list -->
+      <div class="sm:hidden space-y-3">
+        @for (payment of payments(); track payment.createdAt) {
+          <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <div class="flex items-center justify-between mb-1.5">
+              <p class="text-sm font-semibold text-gray-900">{{ payment.amount | currency:'INR':'symbol':'1.0-0' }}</p>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                +{{ payment.sessionsAdded }} sessions
+              </span>
+            </div>
+            <p class="text-xs text-gray-500">{{ payment.date | date:'mediumDate':'Asia/Kolkata' }}</p>
+          </div>
+        }
       </div>
 
       <!-- Footer -->
